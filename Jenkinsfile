@@ -14,38 +14,38 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                bat 'npm install'
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Building the Node.js application...'
+                bat 'npm run build'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running tests (if any)...'
+                bat 'npm test'
             }
         }
 
         stage('Package with Docker') {
             steps {
-                sh 'docker build -t node-cicd-app .'
+                bat 'docker build -t node-cicd-app .'
             }
         }
 
         stage('Run Container') {
             steps {
-                sh 'docker run -d -p 3000:3000 node-cicd-app'
+                bat 'docker run -d -p 3000:3000 --name node-cicd node-cicd-app'
             }
         }
     }
 
     post {
         success {
-            echo '✅ Build completed successfully!'
+            echo '✅ Build and Deployment Successful!'
         }
         failure {
             echo '❌ Build failed. Check logs for details.'
